@@ -171,38 +171,87 @@
             </h1>
         <?php endif; ?>
 
-           <!-- Category Filters -->
+                <?php
+        // First check if we should show the filter
+        $show_filter = false;
+
+        if (!is_category()) {
+            // Show on main archive if there are main categories
+            $main_categories = get_categories(array(
+                'parent' => 0,
+                'hide_empty' => true
+            ));
+            $show_filter = !empty($main_categories);
+        } else {
+            // Get current category
+            $current_cat = get_queried_object();
+            
+            // Check for subcategories
+            $subcategories = get_categories(array(
+                'parent' => $current_cat->term_id,
+                'hide_empty' => true
+            ));
+            
+            // Only show filter if there are subcategories
+            $show_filter = !empty($subcategories);
+        }
+
+        // Only output the filter HTML if we should show it
+        if ($show_filter) : ?>
+        <!-- Category Filters -->
         <div class="relative -mx-4 px-4 md:mx-0 md:px-0">
             <div class="category-filters flex overflow-x-auto scrollbar-hide -mx-1 px-1 py-2">
                 <div class="flex gap-3 min-w-full md:min-w-0">
-                    <div class="filter shrink-0">
-                        <input data-filter="all" value="all" type="radio" name="cat" id="all" 
-                            class="peer hidden" <?php echo (!is_category()) ? 'checked' : ''; ?> />
-                        <label for="all" 
-                            class="min-h-[53px] cursor-pointer transition-all hover:bg-base-300 bg-base-200 inline-flex items-center justify-center rounded-md leading-none font-bold font-heading pt-5 pb-4 px-8 text-primary capitalize peer-checked:bg-primary peer-checked:text-white whitespace-nowrap">
-                            <span class="text-inherit">Alle berichten</span>
-                        </label>
-                    </div>
-
-                    <?php 
-                    $categories = get_categories();
-                    foreach ($categories as $cat) { 
-                        $is_current = is_category($cat->term_id);
-                    ?>
+                    <?php
+                    // Show "All Posts" button only on main archive
+                    if (!is_category()) : ?>
                         <div class="filter shrink-0">
-                            <input data-filter="<?php echo esc_attr($cat->slug); ?>" 
-                                   value="<?php echo esc_attr($cat->slug); ?>" 
-                                   type="radio" 
-                                   name="cat" 
-                                   id="<?php echo esc_attr($cat->slug); ?>" 
-                                   class="peer hidden"
-                                   <?php checked($is_current, true); ?> />
-                            <label for="<?php echo esc_attr($cat->slug); ?>" 
-                                   class="min-h-[53px] cursor-pointer transition-all hover:bg-base-300 bg-base-200 inline-flex items-center justify-center rounded-md leading-none font-bold font-heading pt-5 pb-4 px-8 text-primary capitalize peer-checked:bg-primary peer-checked:text-white whitespace-nowrap">
-                                <span class="text-inherit"><?php echo esc_html($cat->name); ?></span>
+                            <input data-filter="all" value="all" type="radio" name="cat" id="all" 
+                                class="peer hidden" checked />
+                            <label for="all" 
+                                class="min-h-[53px] cursor-pointer transition-all hover:bg-base-300 bg-base-200 inline-flex items-center justify-center rounded-md leading-none font-bold font-heading pt-5 pb-4 px-8 text-primary capitalize peer-checked:bg-primary peer-checked:text-white whitespace-nowrap">
+                                <span class="text-inherit">Alle berichten</span>
                             </label>
                         </div>
-                    <?php } ?>
+                    <?php
+                        // Display main categories
+                        foreach ($main_categories as $cat) { 
+                            $is_current = is_category($cat->term_id);
+                        ?>
+                            <div class="filter shrink-0">
+                                <input data-filter="<?php echo esc_attr($cat->slug); ?>" 
+                                    value="<?php echo esc_attr($cat->slug); ?>" 
+                                    type="radio" 
+                                    name="cat" 
+                                    id="<?php echo esc_attr($cat->slug); ?>" 
+                                    class="peer hidden"
+                                    <?php checked($is_current, true); ?> />
+                                <label for="<?php echo esc_attr($cat->slug); ?>" 
+                                    class="min-h-[53px] cursor-pointer transition-all hover:bg-base-300 bg-base-200 inline-flex items-center justify-center rounded-md leading-none font-bold font-heading pt-5 pb-4 px-8 text-primary capitalize peer-checked:bg-primary peer-checked:text-white whitespace-nowrap">
+                                    <span class="text-inherit"><?php echo esc_html($cat->name); ?></span>
+                                </label>
+                            </div>
+                        <?php }
+                    else :
+                        // Display subcategories
+                        foreach ($subcategories as $cat) { 
+                            $is_current = is_category($cat->term_id);
+                        ?>
+                            <div class="filter shrink-0">
+                                <input data-filter="<?php echo esc_attr($cat->slug); ?>" 
+                                    value="<?php echo esc_attr($cat->slug); ?>" 
+                                    type="radio" 
+                                    name="cat" 
+                                    id="<?php echo esc_attr($cat->slug); ?>" 
+                                    class="peer hidden"
+                                    <?php checked($is_current, true); ?> />
+                                <label for="<?php echo esc_attr($cat->slug); ?>" 
+                                    class="min-h-[53px] cursor-pointer transition-all hover:bg-base-300 bg-base-200 inline-flex items-center justify-center rounded-md leading-none font-bold font-heading pt-5 pb-4 px-8 text-primary capitalize peer-checked:bg-primary peer-checked:text-white whitespace-nowrap">
+                                    <span class="text-inherit"><?php echo esc_html($cat->name); ?></span>
+                                </label>
+                            </div>
+                        <?php }
+                    endif; ?>
                 </div>
             </div>
 
@@ -210,6 +259,8 @@
             <div class="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-white pointer-events-none md:hidden"></div>
             <div class="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-white pointer-events-none md:hidden"></div>
         </div>
+        <?php endif; ?>
+
         </div>
     </header>
 

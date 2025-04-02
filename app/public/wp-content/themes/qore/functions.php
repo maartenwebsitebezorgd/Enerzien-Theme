@@ -37,6 +37,7 @@ include_once get_template_directory() . '/includes/custom-post-types/projecten.p
 include_once get_template_directory() . '/includes/custom-post-types/themas.php';
 include_once get_template_directory() . '/includes/custom-post-types/partners.php';
 include_once get_template_directory() . '/includes/custom-post-types/vacatures.php';
+include_once get_template_directory() . '/includes/custom-post-types/events.php';
 
 // Taxonomies
 // include_once get_template_directory() . '/includes/taxonomies/taxonomy-sample.php';
@@ -291,13 +292,13 @@ function add_quick_edit_featured()
             });
         </script>
         <script type="text/template" id="featured-template">
-                                                                                                                                    <div class="inline-edit-group wp-clearfix">
-                                                                                                                                        <label class="alignleft">
-                                                                                                                                            <input type="checkbox" name="featured_post" value="1">
-                                                                                                                                            <span class="checkbox-title">Featured</span>
-                                                                                                                                        </label>
-                                                                                                                                    </div>
-                                                                                                                                </script>
+                                                                                                                                                    <div class="inline-edit-group wp-clearfix">
+                                                                                                                                                        <label class="alignleft">
+                                                                                                                                                            <input type="checkbox" name="featured_post" value="1">
+                                                                                                                                                            <span class="checkbox-title">Featured</span>
+                                                                                                                                                        </label>
+                                                                                                                                                    </div>
+                                                                                                                                                </script>
         <?php
     }
 }
@@ -323,6 +324,15 @@ add_action('save_post', 'save_quick_edit_featured');
 
 function use_archive_template($template)
 {
+    // First check if this is an event post type archive
+    if (is_post_type_archive('event')) {
+        $event_template = locate_template(['archive-event.php']);
+        if (!empty($event_template)) {
+            return $event_template;
+        }
+    }
+
+    // Then check for regular archives
     if (is_home() || is_archive() || is_category()) {
         $new_template = locate_template(['archive.php', 'index.php']);
         if (!empty($new_template)) {
