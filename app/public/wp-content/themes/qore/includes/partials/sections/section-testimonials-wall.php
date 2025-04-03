@@ -1,7 +1,6 @@
 <?php $group = get_sub_field('testimonials_wall'); ?>
 
 
-
 <?php if (!empty($group['choose_posts'])): ?>
     <div class="relative isolate bg-white pb-32 pt-24 sm:pt-32">
         <div class="absolute inset-x-0 top-1/2 -z-10 -translate-y-1/2 transform-gpu overflow-hidden opacity-30 blur-3xl"
@@ -43,7 +42,7 @@
                             alt="">
                         <div class="flex-auto">
                             <div class="font-semibold">Brenna Goyette</div>
-                            <div class="text-gray-600">@brennagoyette</div>
+                            <div class="text-gray-600">@companyname</div>
                         </div>
                         <img class="h-10 w-auto flex-none"
                             src="https://tailwindui.com/plus/img/logos/savvycal-logo-gray-900.svg" alt="">
@@ -64,7 +63,7 @@
                                     alt="">
                                 <div>
                                     <div class="font-semibold">Leslie Alexander</div>
-                                    <div class="text-gray-600">@lesliealexander</div>
+                                    <div class="text-gray-600">@companyname</div>
                                 </div>
                             </figcaption>
                         </figure>
@@ -82,7 +81,7 @@
                                     alt="">
                                 <div>
                                     <div class="font-semibold">Leslie Alexander</div>
-                                    <div class="text-gray-600">@lesliealexander</div>
+                                    <div class="text-gray-600">@companyname</div>
                                 </div>
                             </figcaption>
                         </figure>
@@ -103,12 +102,10 @@
                                     alt="">
                                 <div>
                                     <div class="font-semibold">Lindsay Walton</div>
-                                    <div class="text-gray-600">@lindsaywalton</div>
+                                    <div class="text-gray-600">@companyname</div>
                                 </div>
                             </figcaption>
                         </figure>
-
-                        <!-- More testimonials... -->
                     </div>
                 </div>
                 <div class="space-y-8 xl:contents xl:space-y-0">
@@ -124,7 +121,7 @@
                                     alt="">
                                 <div>
                                     <div class="font-semibold">Tom Cook</div>
-                                    <div class="text-gray-600">@tomcook</div>
+                                    <div class="text-gray-600">@companyname</div>
                                 </div>
                             </figcaption>
                         </figure>
@@ -159,12 +156,10 @@
                                     alt="">
                                 <div>
                                     <div class="font-semibold">Leonard Krasner</div>
-                                    <div class="text-gray-600">@leonardkrasner</div>
+                                    <div class="text-gray-600">@companyname</div>
                                 </div>
                             </figcaption>
                         </figure>
-
-                        <!-- More testimonials... -->
                     </div>
                 </div>
             </div>

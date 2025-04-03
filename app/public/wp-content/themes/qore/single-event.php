@@ -34,13 +34,24 @@ get_header(); ?>
         <div class="container mx-auto px-4">
             <div class="flex flex-wrap -mx-4">
                 <div class="w-full lg:w-8/12 px-4 mb-8 lg:mb-0">
-                    <?php if (has_post_thumbnail()) : ?>
+                <h1 class="text-3xl md:text-4xl font-heading font-bold mb-6"><?php the_title(); ?></h1>
+                    <?php 
+                    // Check if there's a main image in ACF field
+                    $main_image = get_field('main_image');
+                    
+                    if ($main_image) : ?>
+                        <div class="mb-8 rounded-lg overflow-hidden">
+                            <img src="<?php echo esc_url($main_image['url']); ?>" 
+                                 alt="<?php echo esc_attr($main_image['alt']); ?>" 
+                                 class="w-full h-auto" />
+                        </div>
+                    <?php elseif (has_post_thumbnail()) : ?>
                         <div class="mb-8 rounded-lg overflow-hidden">
                             <?php the_post_thumbnail('large', ['class' => 'w-full h-auto']); ?>
                         </div>
                     <?php endif; ?>
                     
-                    <h1 class="text-3xl md:text-4xl font-heading font-bold mb-6"><?php the_title(); ?></h1>
+                    
                     
                     <div class="prose max-w-none mb-8">
                         <?php the_content(); ?>
@@ -112,12 +123,37 @@ get_header(); ?>
                                     </div>
                                 </div>
                             <?php endif; ?>
+
+                            <?php 
+                            $organisator = get_field('organisator');
+                            if ($organisator) : ?>
+                                <div class="mb-4">
+                                    <div class="flex items-start">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-primary mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                        </svg>
+                                        <div>
+                                            <span class="font-bold block">Organisator</span>
+                                            <span><?php echo esc_html($organisator); ?></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
                         </div>
                         
-                        <?php if (!$is_past_event) : ?>
+                        <?php
+                        // Get registration data if available
+                        $registration_data = get_field('registration');
+                        $registration_url = !empty($registration_data['url']) ? $registration_data['url'] : '';
+                        $registration_label = !empty($registration_data['label']) ? $registration_data['label'] : 'Aanmelden voor dit evenement';
+                        
+                        // Only show registration button if there's a URL and the event is not in the past
+                        if (!$is_past_event && !empty($registration_url)) : ?>
                             <div class="mt-6">
-                                <a href="#contact" class="block w-full bg-primary hover:bg-primary-dark text-white text-center font-bold py-3 px-4 rounded transition-colors duration-200">
-                                    Aanmelden voor dit evenement
+                                <a href="<?php echo esc_url($registration_url); ?>" 
+                                   target="<?php echo strpos($registration_url, get_site_url()) === 0 ? '_self' : '_blank'; ?>"
+                                   class="block w-full bg-primary hover:bg-primary-dark text-white text-center font-bold py-3 px-4 rounded transition-colors duration-200">
+                                    <?php echo esc_html($registration_label); ?>
                                 </a>
                             </div>
                         <?php endif; ?>

@@ -110,6 +110,9 @@ get_header(); ?>
 
         $past_events = new WP_Query($past_args);
         $past_count = $past_events->found_posts;
+        
+        // Only show the past events section if there are past events
+        if ($past_count > 0): 
         ?>
 
         <!-- Past Events Section -->
@@ -129,32 +132,27 @@ get_header(); ?>
                 <?php endif; ?>
             </div>
 
-            <?php if ($past_events->have_posts()): ?>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <?php
-                    while ($past_events->have_posts()):
-                        $past_events->the_post();
-                        get_template_part('includes/partials/events/event', 'compact-card');
-                    endwhile;
-                    wp_reset_postdata();
-                    ?>
-                </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <?php
+                while ($past_events->have_posts()):
+                    $past_events->the_post();
+                    get_template_part('includes/partials/events/event', 'compact-card');
+                endwhile;
+                wp_reset_postdata();
+                ?>
+            </div>
 
-                <?php if (isset($_GET['show_all_past'])): ?>
-                    <div class="text-center mt-10">
-                        <a href="<?php echo get_post_type_archive_link('event'); ?>"
-                            class="inline-block border border-primary text-primary hover:bg-primary hover:text-white font-bold py-2 px-6 rounded transition-colors duration-200">
-                            Toon minder
-                        </a>
-                    </div>
-                <?php endif; ?>
-
-            <?php else: ?>
-                <div class="text-center py-10 bg-gray-50 rounded-lg">
-                    <p class="text-gray-600">Er zijn nog geen eerdere evenementen.</p>
+            <?php if (isset($_GET['show_all_past'])): ?>
+                <div class="text-center mt-10">
+                    <a href="<?php echo get_post_type_archive_link('event'); ?>"
+                        class="inline-block border border-primary text-primary hover:bg-primary hover:text-white font-bold py-2 px-6 rounded transition-colors duration-200">
+                        Toon minder
+                    </a>
                 </div>
             <?php endif; ?>
         </div>
+        
+        <?php endif; // End of check for past events ?>
     </div>
 </section>
 
